@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduManage AI V6 – Lõi backend</title>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--tx:#1b2430;--mut:#5b6877;--ac:#1565c0;--bd:#dbe2ea}
+@media (prefers-color-scheme:dark){:root{--bg:#10151c;--card:#18202a;--tx:#e8edf3;--mut:#9aa8b7;--ac:#6ab0ff;--bd:#2a3542}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{margin:0 0 6px;font-size:1.9rem}
+.sub{color:var(--mut);margin:0 0 28px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+h2{margin:0 0 10px;font-size:1.15rem;color:var(--ac)}
+pre{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:12px;overflow-x:auto;font-size:.9rem}
+code{font-family:ui-monospace,Consolas,monospace}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+.note{color:var(--mut);font-size:.9rem}
+a{color:var(--ac)}
+</style>
+</head>
+<body>
+<main>
+<h1>EduManage AI V6</h1>
+<p class="sub">Lõi backend quản lý hồ sơ chuyên môn trường học – Python thư viện chuẩn + SQLite</p>
+
+<section>
+<h2>Giới thiệu</h2>
+<p>Máy chủ API quản lý vòng đời hồ sơ (kế hoạch bài dạy, kế hoạch giáo dục, biên bản, phiếu dự giờ, báo cáo) qua các bước: giáo viên nộp → tổ trưởng rà soát → ban giám hiệu duyệt. Quyền được kiểm tra ở máy chủ cho mọi API.</p>
+</section>
+
+<section>
+<h2>Chạy nhanh</h2>
+<pre><code>python3 server.py init-admin admin
+python3 server.py 8000
+python3 test_server.py</code></pre>
+<p class="note">Cần Python 3.9+. Không cần cài thêm gói nào.</p>
+</section>
+
+<section>
+<h2>Vai trò</h2>
+<div class="wrap"><table>
+<tr><th>Mã</th><th>Vai trò</th><th>Quyền chính</th></tr>
+<tr><td><code>gv</code></td><td>Giáo viên</td><td>Tạo, nộp, thu hồi, nộp phiên bản mới</td></tr>
+<tr><td><code>tt</code></td><td>Tổ trưởng</td><td>Rà soát, ghi phiếu rà soát, chuyển chờ duyệt</td></tr>
+<tr><td><code>bgh</code></td><td>Ban giám hiệu</td><td>Duyệt, từ chối, yêu cầu chỉnh sửa</td></tr>
+<tr><td><code>ad</code></td><td>Quản trị</td><td>Tạo/khóa tài khoản, sao lưu</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>API</h2>
+<div class="wrap"><table>
+<tr><th>Phương thức</th><th>Đường dẫn</th><th>Mô tả</th></tr>
+<tr><td>POST</td><td><code>/api/login</code></td><td>Đăng nhập, nhận token</td></tr>
+<tr><td>GET</td><td><code>/api/docs</code></td><td>Danh sách hồ sơ trong phạm vi</td></tr>
+<tr><td>POST</td><td><code>/api/docs</code></td><td>Tạo hồ sơ</td></tr>
+<tr><td>POST</td><td><code>/api/docs/{id}/action</code></td><td>Chuyển trạng thái</td></tr>
+<tr><td>POST</td><td><code>/api/docs/{id}/review</code></td><td>Phiếu rà soát</td></tr>
+<tr><td>POST</td><td><code>/api/users</code></td><td>Tạo tài khoản</td></tr>
+<tr><td>POST</td><td><code>/api/users/{id}/deactivate</code></td><td>Khóa tài khoản</td></tr>
+<tr><td>GET</td><td><code>/api/backup</code></td><td>Sao lưu JSON</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>Bảo mật</h2>
+<p>PBKDF2-SHA256 200.000 vòng, token lưu dạng băm, khóa đăng nhập sau 5 lần sai, khóa lạc quan chống xung đột, nhật ký kiểm toán đầy đủ.</p>
+<p class="note">Trang này chỉ là trang giới thiệu tĩnh; GitHub Pages không chạy được <code>server.py</code>.</p>
+</section>
+</main>
+</body>
+</html>
